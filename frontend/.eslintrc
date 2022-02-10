@@ -1,0 +1,113 @@
+{
+    "root": true,
+    "parser": "vue-eslint-parser",
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "tsconfigRootDir": "./",
+        "extraFileExtensions": [
+            ".vue",
+            ".env",
+            ".json"
+        ],
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "vue",
+        "import"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:vue/recommended",
+        "plugin:import/typescript"
+    ],
+    "env": {
+        "node": true
+    },
+    "rules": {
+        "one-var": 0,
+        "arrow-parens": 0,
+        "generator-star-spacing": 0,
+        "no-debugger": 0,
+        "no-console": 0,
+        "no-extra-semi": 2,
+        "space-before-function-paren": 0,
+        "eqeqeq": 0,
+        "spaced-comment": 0,
+        "no-useless-escape": 0,
+        "no-tabs": 0,
+        "no-mixed-spaces-and-tabs": 0,
+        "new-cap": 0,
+        "camelcase": 0,
+        "no-new": 0,
+        "indent": "off",
+        "semi": "off",
+        "no-unused-vars": "off",
+        "require-jsdoc": "off",
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "ignoreTemplateLiterals": true,
+                "ignoreUrls": true,
+                "ignoreStrings": true,
+                "ignorePattern": "class"
+            }
+        ],
+        "brace-style": [
+            "error",
+            "1tbs",
+            {
+                "allowSingleLine": true
+            }
+        ],
+        "block-spacing": [
+            "error",
+            "always"
+        ],
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "@typescript-eslint/semi": [
+            "error"
+        ],
+        "@typescript-eslint/indent": "off",
+        "@typescript-eslint/ban-ts-ignore": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "off"
+        ],
+        "@typescript-eslint/camelcase": [
+            "off"
+        ],
+        "@typescript-eslint/explicit-function-return-type": [
+            "off"
+        ],
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/interface-name-prefix": [
+            "error",
+            {
+                "prefixWithI": "always"
+            }
+        ],
+        "@typescript-eslint/no-use-before-define": [
+            "off"
+        ],
+        "vue/max-attributes-per-line": [
+            "error",
+            {
+                "singleline": {
+                    "max": 10
+                },
+                "multiline": {
+                    "max": 10
+                }
+            }
+        ],
+        "vue/singleline-html-element-content-newline": [
+            "off"
+        ]
+    }
+}
