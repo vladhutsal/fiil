@@ -6,10 +6,10 @@ RUN deno install -qAf --unstable https://deno.land/x/denon@2.5.0/denon.ts
 
 # USER deno
 
-COPY /deps.ts .
-RUN deno cache deps.ts
+COPY src/deps.ts ./src/
+RUN deno cache src/deps.ts
 
 ADD . .
-RUN deno cache main.ts
+RUN deno cache src/main.ts
 
 # CMD ["run", "--allow-net", "--allow-read", "--allow-env", "main.ts"]
