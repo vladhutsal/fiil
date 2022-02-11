@@ -24,7 +24,7 @@
       }
     },
     async created() {
-      const response = await fetch(BACK_URL + '/', {
+      const response = await fetch(BACK_URL + '/api', {
         mode: 'cors',
         method: 'GET',
       });

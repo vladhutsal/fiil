@@ -33,7 +33,7 @@ function compilePostsF(posts: PostDB[]): PostF[] {
 const collection = client.database().collection<Post>("posts");
 
 router
-  .get("/", async (context) => {
+  .get("/api", async (context) => {
     console.log('---> GET ACCESSING')
     try {
       const posts = await collection
@@ -55,7 +55,7 @@ router
     }
 });
 
-router.post("/", async (context) => {
+router.post("/api", async (context) => {
   if (!context.request.hasBody) context.throw(Status.BadRequest, "Bad Request");
 
   const body = await context.request.body().value;
@@ -74,11 +74,7 @@ router.post("/", async (context) => {
   context.response.body = post;
 });
 
-app.use(
-  allowCors({
-    origin: 'http://localhost:8080',
-  }),
-);
+app.use(allowCors());
 app.use(router.routes());
 app.use(router.allowedMethods());
 
