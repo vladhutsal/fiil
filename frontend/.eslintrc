@@ -85,13 +85,8 @@
         "@typescript-eslint/explicit-function-return-type": [
             "off"
         ],
+        // "@typescript-eslint/no-non-null-assertion": "false",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/interface-name-prefix": [
-            "error",
-            {
-                "prefixWithI": "always"
-            }
-        ],
         "@typescript-eslint/no-use-before-define": [
             "off"
         ],

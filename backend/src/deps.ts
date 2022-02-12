@@ -1,3 +1,5 @@
+export { decode, encode } from "https://deno.land/std@0.125.0/encoding/base64.ts";
+
 export { Application, Router, Status } from "https://deno.land/x/oak@v10.2.0/mod.ts"
 
 export { Bson, MongoClient } from "https://deno.land/x/mongo@v0.29.1/mod.ts";

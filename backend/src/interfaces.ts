@@ -1,10 +1,7 @@
 import { Bson } from './deps.ts';
 
-export interface IPostDB {
+export interface IUserPngDB {
   _id: Bson.ObjectId;
-  title: string;
-}
-
-export interface IPostF {
-  title: string;
+  // base64 string
+  imgName: string;
 }

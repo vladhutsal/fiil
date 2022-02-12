@@ -5,7 +5,7 @@ const config: DenonConfig = {
     start: {
       cmd: "deno run src/main.ts",
       desc: "Run fiil backend",
-      allow: ['env', 'net', 'read'],
+      allow: ['env', 'net', 'read', 'write'],
       "log": "info"
     },
   },
