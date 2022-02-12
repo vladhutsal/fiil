@@ -11,25 +11,19 @@
       @mousemove="userIsDrawing"
       @mouseup="stopDrawing"
     />
-    <v-btn
-      @click="savePng"
-    >
-      Save
-    </v-btn>
+    <v-btn @click="savePng">Save</v-btn>
 
-    <v-btn
-      @click="loadAllPng"
-    >
-      Load
-    </v-btn>
-    <v-card v-for="(img, idx) in store.userCanvas" :key="idx">
-      <img
-        :src="getSrc(idx)"
+    <v-btn @click="loadAllPng">Load</v-btn>
+    <v-card :key="userImagesLen">
+      <canvas
+        v-for="(img, idx) in store.userCanvas"
+        :id="'userCanva' + idx"
+        :key="idx"
         class="ma-3"
         width="400"
         height="400"
-        style="border: 1px solid #ccc;"
-      >
+        style="background-color: #eee; border: 1px solid #ccc;"
+      />
     </v-card>
   </v-flex>
 </template>
@@ -73,10 +67,36 @@
 
     },
 
+    computed: {
+      isImagesLoading: {
+        get(): boolean { return this.store.loadingImages; },
+        set(toogler: boolean) { this.store.$patch({ loadingImages: toogler }); }
+      }
+    },
+
+    updated() {
+      if (!this.isImagesLoading) this.setImageSrc();
+    },
+
     methods: {
-      getSrc(idx: number): string {
-        const base64 = this.store.userCanvas[idx];
-        return 'data:image/png;base64,' + base64;
+      setImageSrc(): void {
+        for (let idx = 0; idx <= this.userImagesLen; idx++) {
+          const canvas = document.getElementById("userCanva" + idx) as HTMLCanvasElement;
+          console.log('canvas', canvas)
+          if (canvas) {
+            const ctx = canvas.getContext("2d");
+            if (ctx) {
+              const image = new Image();
+              image.onload = function() {
+                ctx.drawImage(image, 0, 0);
+              };
+              const base64 = this.store.userCanvas[idx];
+              image.src = 'data:image/png;base64,' + base64;
+            } else {
+              console.log('no canvas found');
+            }
+          }
+        }
       },
 
       startDrawing(e: MouseEvent) {
@@ -143,11 +163,13 @@
       },
 
       async loadAllPng() {
+        this.store.$patch({ loadingImages: true });
         const imagesArray = await this.store.loadAllPng();
         if (imagesArray) {
           this.store.$patch({ userCanvas: imagesArray });
           this.userImagesLen = imagesArray.length;
         }
+        this.store.$patch({ loadingImages: false });
       },
     },
   });

@@ -4,6 +4,7 @@ const state = (): IState => {
   return {
     user: undefined,
     userCanvas: [],
+    loadingImages: false,
   };
 };
 
