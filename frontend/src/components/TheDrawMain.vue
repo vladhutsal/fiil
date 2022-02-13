@@ -82,7 +82,6 @@
       setImageSrc(): void {
         for (let idx = 0; idx <= this.userImagesLen; idx++) {
           const canvas = document.getElementById("userCanva" + idx) as HTMLCanvasElement;
-          console.log('canvas', canvas)
           if (canvas) {
             const ctx = canvas.getContext("2d");
             if (ctx) {
