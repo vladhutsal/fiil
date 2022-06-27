@@ -10,9 +10,11 @@ services:
       dockerfile: Dockerfile
     command: denon start
     volumes:
-      - /Users/vladhutsal/playground/fiiiiil/backend/:/backend
+      - ./backend/:/backend
     ports:
       - 8000:8000
+    depends_on:
+      - mongodb
   
   frontend:
     container_name: frontend
@@ -21,11 +23,24 @@ services:
       dockerfile: Dockerfile
     command: npm run serve
     volumes:
-        - /Users/vladhutsal/playground/fiiiiil/frontend/:/frontend
+        - ./frontend/:/frontend
     networks:
       - fiil
     ports:
       - 8080:8080
+
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./database:/data/db
+    networks:
+      - fiil
+    ports:
+      - 27017:27017
     
   nginx:
     image: nginx:latest

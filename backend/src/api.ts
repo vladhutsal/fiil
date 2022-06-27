@@ -2,7 +2,7 @@ import { Bson } from './deps.ts';
 import { Router, Status } from './deps.ts';
 import { decode as b64decode, encode as b64ecnode } from './deps.ts';
 
-import { CRUDGetUserImages, CRUDPostImage } from "./db/crud.ts";
+import CRUD from "./db/crud.ts";
 import { IUserPngDB } from "./interfaces.ts";
 import { API_URL, IMG_DIR_PATH } from "../env/env.ts";
 
@@ -11,7 +11,7 @@ export const router = new Router();
 router
   .get(API_URL + 'get-all-png', async (context) => {
     try {
-      const images = await CRUDGetUserImages();
+      const images = await CRUD.getUserImages();
 
       const imagesToFront: string[] = [];
       for (const img of images) {
@@ -51,7 +51,7 @@ router
       _id: new Bson.ObjectId(),
       imgName: name,
     }
-    await CRUDPostImage(image);
+    await CRUD.postImage(image);
 
     context.response.status = 201;
 })

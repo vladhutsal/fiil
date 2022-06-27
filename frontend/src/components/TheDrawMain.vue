@@ -1,18 +1,17 @@
 <template>
   <v-flex>
     <canvas
-      ref="imageCanva"
+      ref="imageCanvas"
       class="ma-3"
       width="400"
       height="400"
       style="background-color: #eee; border: 1px solid #ccc;"
 
-      @mousedown="startDrawing"
-      @mousemove="userIsDrawing"
-      @mouseup="stopDrawing"
+      @mousedown.prevent="startDrawing"
+      @mousemove.prevent="userIsDrawing"
+      @mouseup.prevent="stopDrawing"
     />
     <v-btn @click="savePng">Save</v-btn>
-
     <v-btn @click="loadAllPng">Load</v-btn>
     <v-card :key="userImagesLen">
       <canvas
@@ -58,9 +57,29 @@
     },
 
     mounted() {
-      this.canvas = this.$refs.imageCanva as HTMLCanvasElement;
+
+      // @mousedown="startDrawing"
+      // @mousemove="userIsDrawing"
+      // @mouseup="stopDrawing"
+
+      // @touchstart="startDrawing"
+      // @touchend="stopDrawing"
+      // @touchmove="userIsDrawing"
+
+      // window.addEventListener('mousedown', this.startDrawing);
+      // window.addEventListener('mousemove', this.userIsDrawing);
+      // window.addEventListener('mouseup', this.stopDrawing);
+      
+
+
+      this.canvas = this.$refs.imageCanvas as HTMLCanvasElement;
       this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
       
+      if (this.canvas) {
+        this.canvas.addEventListener('touchstart', this.startDrawing, false);
+        this.canvas.addEventListener('touchmove', this.userIsDrawing, false);
+        this.canvas.addEventListener('touchend', this.stopDrawing, false);
+      }
       // drawing undo redo preparation
       // const listener = (e: KeyboardEvent) => this.restoreEvent(e);
       // window.addEventListener('keydown', listener);
@@ -98,8 +117,9 @@
         }
       },
 
-      startDrawing(e: MouseEvent) {
+      startDrawing(e: MouseEvent | TouchEvent) {
         if (this.context) {
+          e.preventDefault();
           const mousePos = this.getMousePos(e);
           if (mousePos) {
             // reset current points when start drawing new line
@@ -112,8 +132,9 @@
         }
       },
 
-      userIsDrawing(e: MouseEvent) {
+      userIsDrawing(e: MouseEvent | TouchEvent) {
         if (this.isDrawing && this.context) {
+          e.preventDefault();
           const mousePos = this.getMousePos(e);
           if (mousePos) {
             // update current line with new mouse pos
@@ -124,8 +145,9 @@
         }
       },
 
-      stopDrawing(e: MouseEvent) {
+      stopDrawing(e: MouseEvent | TouchEvent) {
         if (this.isDrawing && this.context) {
+          e.preventDefault();
           const mousePos = this.getMousePos(e);
           if (mousePos) {
             this.context.lineTo(mousePos.x, mousePos.y);
@@ -144,13 +166,25 @@
       //   }
       // },
 
-      getMousePos(e: MouseEvent): IUserLine | undefined {
+      getMousePos(e: MouseEvent | TouchEvent): IUserLine | undefined {
         if (this.canvas) {
-          const rect = this.canvas.getBoundingClientRect();
-          return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
-          };
+          if (e instanceof(MouseEvent)) {
+            const rect = this.canvas.getBoundingClientRect();
+            return {
+              x: e.clientX - rect.left,
+              y: e.clientY - rect.top
+            };
+          }
+          if (e instanceof(TouchEvent)) {
+            const rect = this.canvas.getBoundingClientRect();
+            if (e.touches && e.touches.length === 1) {
+              return {
+                x: e.touches[0].clientX - rect.left,
+                y: e.touches[0].clientY - rect.top
+              };
+            }
+          }
+          
         }
       },
 
