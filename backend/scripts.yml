@@ -5,19 +5,3 @@ scripts:
     allow: ['env', 'net', 'read', 'write']
     log: "info"
     watch: true
-
-watcher:
-  interval: 100
-  exts:
-    - js
-    - jsx
-    - ts
-    - tsx
-    - json
-  match:
-    - "**/*.*"
-  skip:
-    - "*/.git/*"
-    - "*/.DS_Store/*"
-    - "*/.vscode/*"
-  legacy: false

@@ -11,6 +11,7 @@ services:
     ports:
       - 27017:27017
     restart: always
+    command: --quiet
 
   backend:
     container_name: backend

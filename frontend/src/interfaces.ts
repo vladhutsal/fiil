@@ -1,5 +1,5 @@
 export interface IState {
-  user: undefined;
+  user: boolean;
   userCanvas: string[];
   loadingImages: boolean;
 }

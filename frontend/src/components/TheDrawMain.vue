@@ -32,8 +32,6 @@
 
   import { IUserLine } from '@/interfaces';
   import { useStore } from '@/store';
-  // import { PropType } from "vue"
-  // import { Post } from '@/interfaces';
 
   export default defineComponent({
     name: 'TheDrawMain',
@@ -57,21 +55,6 @@
     },
 
     mounted() {
-
-      // @mousedown="startDrawing"
-      // @mousemove="userIsDrawing"
-      // @mouseup="stopDrawing"
-
-      // @touchstart="startDrawing"
-      // @touchend="stopDrawing"
-      // @touchmove="userIsDrawing"
-
-      // window.addEventListener('mousedown', this.startDrawing);
-      // window.addEventListener('mousemove', this.userIsDrawing);
-      // window.addEventListener('mouseup', this.stopDrawing);
-      
-
-
       this.canvas = this.$refs.imageCanvas as HTMLCanvasElement;
       this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
       
@@ -80,10 +63,6 @@
         this.canvas.addEventListener('touchmove', this.userIsDrawing, false);
         this.canvas.addEventListener('touchend', this.stopDrawing, false);
       }
-      // drawing undo redo preparation
-      // const listener = (e: KeyboardEvent) => this.restoreEvent(e);
-      // window.addEventListener('keydown', listener);
-
     },
 
     computed: {
@@ -122,9 +101,6 @@
           e.preventDefault();
           const mousePos = this.getMousePos(e);
           if (mousePos) {
-            // reset current points when start drawing new line
-            // this.currentLinePoints = [];
-            // this.currentLinePoints.push(mousePos);
             this.isDrawing = true;
             this.context.beginPath();
             this.context.moveTo(mousePos.x, mousePos.y);
@@ -137,8 +113,6 @@
           e.preventDefault();
           const mousePos = this.getMousePos(e);
           if (mousePos) {
-            // update current line with new mouse pos
-            // this.currentLinePoints.push(mousePos);
             this.context.lineTo(mousePos.x, mousePos.y);
             this.context.stroke();
           }
@@ -157,14 +131,6 @@
           }
         }
       },
-
-      // restoreEvent(e: KeyboardEvent) {
-      //   console.log('restore event')
-      //   if (e.metaKey && e.code === 'KeyZ' && this.context) {
-      //     console.log('restoring')
-      //     this.context.restore();
-      //   }
-      // },
 
       getMousePos(e: MouseEvent | TouchEvent): IUserLine | undefined {
         if (this.canvas) {

@@ -2,7 +2,7 @@ import { IState } from "@/interfaces";
 
 const state = (): IState => {
   return {
-    user: undefined,
+    user: false,
     userCanvas: [],
     loadingImages: false,
   };
