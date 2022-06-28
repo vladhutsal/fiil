@@ -45,7 +45,7 @@ import { useStore } from '@/store';
 import { defineComponent } from '@vue/composition-api';
 
 export default defineComponent({
-  name: 'TheLogin',
+  name: 'AuthLogin',
 
   setup() {
     const store = useStore();

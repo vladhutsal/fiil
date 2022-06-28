@@ -27,8 +27,9 @@
         text
         :ripple="false"
         plain
-        to="/"
+        to="login"
         class="text-lowercase"
+        @click="store.currentAuthTab = 'login'"
       >
         login
       </v-btn>
@@ -37,8 +38,9 @@
         text
         :ripple="false"
         plain
-        to="/chat"
+        to="register"
         class="text-lowercase"
+        @click="store.currentAuthTab = 'register'"
       >
         register
       </v-btn>

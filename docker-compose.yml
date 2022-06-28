@@ -11,7 +11,8 @@ services:
     ports:
       - 27017:27017
     restart: always
-    command: --quiet
+    command: mongod --quiet
+
 
   backend:
     container_name: backend

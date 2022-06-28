@@ -5,6 +5,7 @@ const state = (): IState => {
     user: false,
     userCanvas: [],
     loadingImages: false,
+    currentAuthTab: 'login',
   };
 };
 
