@@ -1,9 +1,9 @@
 import { BACK_URL } from '@/env';
-import { compileUnit8Array } from '@/helpers';
+import { IUser, IUserRegister } from '@/interfaces';
 
 
 const actions = {
-  async uploadPng(canvasData: string): Promise<boolean> {
+  async actionUploadPng(canvasData: string): Promise<boolean> {
     try {
       const resp = await fetch(BACK_URL + '/upload-png', {
         method: 'POST',
@@ -16,17 +16,36 @@ const actions = {
     }
   },
 
-  async loadAllPng(): Promise<string[] | undefined> {
+  async actionLoadAllPng(): Promise<string[] | undefined> {
     try {
       const resp = await fetch(BACK_URL + '/get-all-png', {
         method: 'GET',
       });
-      const data = await resp.json().then(data => data as {data: string[]});
-      return data.data;
+      const data: string[] = await resp.json();
+      if (data) return data;
+
     } catch (err) {
       console.log(err);
     }
-  }
+  },
+
+  async actionRegisterUser(userData: IUserRegister): Promise<IUser | void> {
+    try {
+      const resp = await fetch(BACK_URL + '/register-user', {
+        method: 'POST',
+        body: JSON.stringify(userData),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      const data: IUser = await resp.json();
+      if (!data) throw 'Empty response, user was not registerd';
+      return data;
+
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
 
 export default actions;

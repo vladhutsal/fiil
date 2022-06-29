@@ -7,6 +7,14 @@ export interface IState {
   currentAuthTab: authTab;
 }
 
+export interface IUser {
+  name: string;
+}
+
+export interface IUserRegister extends IUser {
+  password: string;
+}
+
 export interface IUserLine {
   x: number;
   y: number;

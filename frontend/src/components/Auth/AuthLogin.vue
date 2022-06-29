@@ -3,24 +3,13 @@
     <v-col cols="4">
       <v-card flat>
         <v-card-text class="pb-0">
-          <v-text-field
-            :style="{'borderRadius': '0px'}"
-            dense
-            flat
-            outlined
-            hide-details
+          <base-text-field
             placeholder="name"
-            color="grey"
-            class="mb-4"
+            margin-bottom="mb-4"
           />
-          <v-text-field
-            :style="{'borderRadius': '0px'}"
-            dense
-            flat
-            outlined
-            hide-details
+          <base-text-field
             placeholder="password"
-            color="grey"
+            margin-bottom="mb-4"
           />
         </v-card-text>
 
@@ -43,9 +32,13 @@
 <script lang="ts">
 import { useStore } from '@/store';
 import { defineComponent } from '@vue/composition-api';
+import BaseTextField from '@/components/Reusable/BaseTextField.vue';
 
 export default defineComponent({
   name: 'AuthLogin',
+  components: {
+    BaseTextField,
+  },
 
   setup() {
     const store = useStore();

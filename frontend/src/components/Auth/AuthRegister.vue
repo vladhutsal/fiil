@@ -3,24 +3,16 @@
     <v-col cols="4">
       <v-card flat>
         <v-card-text class="pb-0">
-          <v-text-field
-            :style="{ borderRadius: '0px' }"
-            dense
-            flat
-            outlined
-            hide-details
+          <base-text-field
             placeholder="name"
-            color="grey"
-            class="mb-4"
+            margin-bottom="mb-4"
+            :value="name"
+            @update:value="newValue => name = newValue"
           />
-          <v-text-field
-            :style="{ borderRadius: '0px' }"
-            dense
-            flat
-            outlined
-            hide-details
+          <base-text-field
             placeholder="password"
-            color="grey"
+            :value="password"
+            @update:value="newValue => password = newValue"
           />
         </v-card-text>
 
@@ -31,6 +23,7 @@
             :ripple="false"
             plain
             class="text-lowercase title font-weight-light"
+            @click="registerUser"
           >
             create user
           </v-btn>
@@ -41,20 +34,38 @@
 </template>
 
 <script lang="ts">
-import { useStore } from '@/store';
-import { defineComponent } from '@vue/composition-api';
+  import { useStore } from '@/store';
+  import { defineComponent } from '@vue/composition-api';
+  import BaseTextField from '../Reusable/BaseTextField.vue';
 
-export default defineComponent({
-  name: 'AuthRegister',
+  export default defineComponent({
+    components: { BaseTextField },
+    name: 'AuthRegister',
 
-  setup() {
-    const store = useStore();
-    return { store };
-  },
-  // data() {
-  //   return {
-  //     posts: [] as Post[],
-  //   }
-  // },
-});
+    setup() {
+      const store = useStore();
+      return { store };
+    },
+
+    data() {
+      return {
+        name: '' as string,
+        password: '' as string,
+      };
+    },
+
+    methods: {
+      async registerUser() {
+        const userData = await this.store.actionRegisterUser({
+          name: this.name,
+          password: this.password,
+        });
+        console.log('-- user data', userData);
+      },
+
+      logg(event: string) {
+        console.log(event);
+      },
+    },
+  });
 </script>

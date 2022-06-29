@@ -65,15 +65,15 @@
       }
     },
 
+    updated() {
+      if (!this.isImagesLoading) this.setImageSrc();
+    },
+
     computed: {
       isImagesLoading: {
         get(): boolean { return this.store.loadingImages; },
         set(toogler: boolean) { this.store.$patch({ loadingImages: toogler }); }
       }
-    },
-
-    updated() {
-      if (!this.isImagesLoading) this.setImageSrc();
     },
 
     methods: {
@@ -157,13 +157,13 @@
       async savePng() {
         if (this.canvas) {
           const canvasData = this.canvas.toDataURL();
-          this.store.uploadPng(canvasData);
+          this.store.actionUploadPng(canvasData);
         }
       },
 
       async loadAllPng() {
         this.store.$patch({ loadingImages: true });
-        const imagesArray = await this.store.loadAllPng();
+        const imagesArray = await this.store.actionLoadAllPng();
         if (imagesArray) {
           this.store.$patch({ userCanvas: imagesArray });
           this.userImagesLen = imagesArray.length;

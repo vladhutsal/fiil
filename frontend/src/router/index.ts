@@ -9,12 +9,10 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "TheHome",
     component: TheHome,
-    meta: { requiresAuth: true }
   },
   {
     path: "/chat",
     name: "Chat",
-    meta: { requiresAuth: true },
     component: () =>
       import(/* webpackChunkName: "chat" */ "../views/TheChat.vue"),
   },
