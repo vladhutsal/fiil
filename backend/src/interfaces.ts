@@ -1,27 +1,28 @@
-import { Bson, Collection } from './deps.ts';
+import { Bson } from './deps.ts';
 
-// Frontend - backend data
-export interface IUserPngDB {
+// <ISomeName>Private - only for backend
+// <ISomeName>Public - shared with frontend
+
+export interface IUserPngPrivate {
   _id: Bson.ObjectId;
   imgName: string;
 }
 
-export interface IUser {
+
+// User:
+export interface IUserPrivate {
+  _id: Bson.ObjectId;
+  userName: string;
+  passHash: string;
+  created: Bson.Timestamp;
+}
+
+export interface IUserRegister {
   name: string;
   password: string;
 }
 
-
-// Internal
-export type TImageCollection = Collection<IUserPngDB>;
-
-export interface ICurrentCollections {
-  images: TImageCollection;
-}
-
-export interface ISecretsDotEnv {
-  MONGO_NAME: string;
-  MONGO_PASS: string;
-  MONGO_DB: string;
-  MONGO_CLUSTER: string;
+export interface IUserPublic {
+  name: string;
+  created: Bson.Timestamp;
 }

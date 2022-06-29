@@ -1,43 +1,34 @@
 <template>
   <v-container>
-    <v-tabs-items v-model="store.currentAuthTab">
-      <v-tab-item
-        :value="'login'"
-      >
-        <auth-login />
+    <v-tabs-items v-model="userStore.currentTypeAuthTab">
+      <v-tab-item :value="'login'">
+        <Authenticate :is-login="true" />
       </v-tab-item>
 
-      <v-tab-item
-        :value="'register'"
-      >
-        <auth-register />
+      <v-tab-item :value="'register'">
+        <Authenticate :is-login="false" />
       </v-tab-item>
     </v-tabs-items>
   </v-container>
 </template>
 
 <script lang="ts">
-import AuthRegister from '@/components/Auth/AuthRegister.vue';
-import AuthLogin from '@/components/Auth/AuthLogin.vue';
-import { useStore } from '@/store';
+import Authenticate from '@/components/Auth/Authenticate.vue';
 import { defineComponent } from '@vue/composition-api';
-import { authTab } from '@/interfaces';
+import { TypeAuthTab } from '@/interfaces';
+import useUserStore from '@/store/userStore';
 
 export default defineComponent({
-  components: {
-    AuthLogin,
-    AuthRegister,
-  },
+  components: { Authenticate },
   name: 'TheAuth',
 
   setup() {
-    const store = useStore();
-    return { store };
+    const userStore = useUserStore();
+    return { userStore };
   },
   
   created() {
-    const authAction = this.$route.path.substring(1);
-    this.store.$patch({ currentAuthTab: authAction as authTab });
+    this.userStore.currentTypeAuthTab = this.$route.path.substring(1) as TypeAuthTab;
   },
 });
 </script>

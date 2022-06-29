@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app flat>
-    <div v-if="store.user" class="d-flex d-row justify-center pa-0" :style="{'minWidth': '100%'}">
+    <div v-if="userStore.user" class="d-flex d-row justify-center pa-0" :style="{'minWidth': '100%'}">
       <v-btn
         text
         :ripple="false"
@@ -29,7 +29,7 @@
         plain
         to="login"
         class="text-lowercase"
-        @click="store.currentAuthTab = 'login'"
+        @click="userStore.currentTypeAuthTab = 'login'"
       >
         login
       </v-btn>
@@ -40,7 +40,7 @@
         plain
         to="register"
         class="text-lowercase"
-        @click="store.currentAuthTab = 'register'"
+        @click="userStore.currentTypeAuthTab = 'register'"
       >
         register
       </v-btn>
@@ -49,15 +49,15 @@
 </template>
 
 <script lang="ts">
-  import { useStore } from "@/store";
+  import useUserStore from "@/store/userStore";
   import { defineComponent } from '@vue/composition-api';
 
   export default defineComponent({
     name: 'TheNavbar',
 
     setup() {
-      const store = useStore();
-      return { store };
+      const userStore = useUserStore();
+      return { userStore };
     },
   });
 </script>

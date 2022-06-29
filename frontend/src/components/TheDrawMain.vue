@@ -15,7 +15,7 @@
     <v-btn @click="loadAllPng">Load</v-btn>
     <v-card :key="userImagesLen">
       <canvas
-        v-for="(img, idx) in store.userCanvas"
+        v-for="(img, idx) in imagesStore.userCanvas"
         :id="'userCanva' + idx"
         :key="idx"
         class="ma-3"
@@ -30,21 +30,21 @@
 <script lang="ts">
   import { defineComponent } from '@vue/composition-api';
 
-  import { IUserLine } from '@/interfaces';
-  import { useStore } from '@/store';
+  import { ILinePoints } from '@/interfaces';
+  import useImagesStore from '@/store/imagesStore';
 
   export default defineComponent({
     name: 'TheDrawMain',
 
     setup() {
-      const store = useStore();
-      return { store };
+      const imagesStore = useImagesStore();
+      return { imagesStore };
     },
 
     data() {
       return {
-        currentLinePoints: [] as IUserLine[],
-        allLines: [] as IUserLine[][],
+        currentLinePoints: [] as ILinePoints[],
+        allLines: [] as ILinePoints[][],
 
         userImagesLen: -1,
 
@@ -71,8 +71,8 @@
 
     computed: {
       isImagesLoading: {
-        get(): boolean { return this.store.loadingImages; },
-        set(toogler: boolean) { this.store.$patch({ loadingImages: toogler }); }
+        get(): boolean { return this.imagesStore.loadingImages; },
+        set(toogler: boolean) { this.imagesStore.$patch({ loadingImages: toogler }); }
       }
     },
 
@@ -87,7 +87,7 @@
               image.onload = function() {
                 ctx.drawImage(image, 0, 0);
               };
-              const base64 = this.store.userCanvas[idx];
+              const base64 = this.imagesStore.userCanvas[idx];
               image.src = 'data:image/png;base64,' + base64;
             } else {
               console.log('no canvas found');
@@ -132,7 +132,7 @@
         }
       },
 
-      getMousePos(e: MouseEvent | TouchEvent): IUserLine | undefined {
+      getMousePos(e: MouseEvent | TouchEvent): ILinePoints | undefined {
         if (this.canvas) {
           if (e instanceof(MouseEvent)) {
             const rect = this.canvas.getBoundingClientRect();
@@ -157,18 +157,18 @@
       async savePng() {
         if (this.canvas) {
           const canvasData = this.canvas.toDataURL();
-          this.store.actionUploadPng(canvasData);
+          this.imagesStore.actionUploadPng(canvasData);
         }
       },
 
       async loadAllPng() {
-        this.store.$patch({ loadingImages: true });
-        const imagesArray = await this.store.actionLoadAllPng();
+        this.imagesStore.$patch({ loadingImages: true });
+        const imagesArray = await this.imagesStore.actionLoadAllPng();
         if (imagesArray) {
-          this.store.$patch({ userCanvas: imagesArray });
+          this.imagesStore.$patch({ userCanvas: imagesArray });
           this.userImagesLen = imagesArray.length;
         }
-        this.store.$patch({ loadingImages: false });
+        this.imagesStore.$patch({ loadingImages: false });
       },
     },
   });

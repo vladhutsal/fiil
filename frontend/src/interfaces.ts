@@ -1,11 +1,16 @@
-export type authTab = 'login' | 'register';
+export type TypeAuthTab = 'login' | 'register';
 
-export interface IState {
-  user: boolean;
+// Pinia stores. Good idea to split them?
+export interface IImagesStore {
   userCanvas: string[];
   loadingImages: boolean;
-  currentAuthTab: authTab;
 }
+
+export interface IUserStore {
+  user: IUser | undefined;
+  currentTypeAuthTab: TypeAuthTab;
+}
+
 
 export interface IUser {
   name: string;
@@ -15,7 +20,13 @@ export interface IUserRegister extends IUser {
   password: string;
 }
 
-export interface IUserLine {
+
+export interface ILinePoints {
   x: number;
   y: number;
+}
+
+export interface IResponse<ResponseDataT> {
+  payload: ResponseDataT;
+  error?: string;
 }

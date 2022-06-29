@@ -23,9 +23,9 @@
             :ripple="false"
             plain
             class="text-lowercase title font-weight-light"
-            @click="registerUser"
+            @click="isLogin ? loginUser() : registerUser()"
           >
-            create user
+            {{ isLogin ? 'enter' :'create user' }}
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -34,17 +34,21 @@
 </template>
 
 <script lang="ts">
-  import { useStore } from '@/store';
+  import useUserStore from '@/store/userStore';
   import { defineComponent } from '@vue/composition-api';
-  import BaseTextField from '../Reusable/BaseTextField.vue';
+  import BaseTextField from '@/components/Reusable/BaseTextField.vue';
 
   export default defineComponent({
+    name: 'Authenticate',
     components: { BaseTextField },
-    name: 'AuthRegister',
+
+    props: {
+      isLogin: { type: Boolean, required: true },
+    },
 
     setup() {
-      const store = useStore();
-      return { store };
+      const userStore = useUserStore();
+      return { userStore };
     },
 
     data() {
@@ -56,15 +60,23 @@
 
     methods: {
       async registerUser() {
-        const userData = await this.store.actionRegisterUser({
+        await this.userStore.actionRegisterUser({
           name: this.name,
           password: this.password,
         });
-        console.log('-- user data', userData);
+        if (this.userStore.user) {
+          this.$router.push('/');
+        }
       },
 
-      logg(event: string) {
-        console.log(event);
+      async loginUser() {
+        await this.userStore.actionRegisterUser({
+          name: this.name,
+          password: this.password,
+        });
+        if (this.userStore.user) {
+          this.$router.push('/');
+        }
       },
     },
   });
