@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { IImagesStore, IResponse, IUser, IUserRegister } from '@/interfaces';
+import { IStoreImages, IResponse, IImages } from '@/interfaces';
 import { BACK_URL } from '@/env';
 
 const useImagesStore = defineStore('images', {
-  state: (): IImagesStore => ({
+  state: (): IStoreImages => ({
     userCanvas: [],
     loadingImages: false,
   }),
@@ -22,12 +22,10 @@ const useImagesStore = defineStore('images', {
       }
     },
 
-    async actionLoadAllPng(): Promise<string[] | void> {
+    async actionLoadAllPng(): Promise<IImages | void> {
       try {
-        const resp = await fetch(BACK_URL + '/get-all-png', {
-          method: 'GET',
-        });
-        const data: IResponse<string[]> = await resp.json();
+        const resp = await fetch(BACK_URL + '/get-all-png');
+        const data: IResponse<IImages> = await resp.json();
         if (data.error) throw data.error;
         if (data) return data.payload;
 

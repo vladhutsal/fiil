@@ -61,7 +61,7 @@
     methods: {
       async registerUser() {
         await this.userStore.actionRegisterUser({
-          name: this.name,
+          userName: this.name,
           password: this.password,
         });
         if (this.userStore.user) {
@@ -70,8 +70,8 @@
       },
 
       async loginUser() {
-        await this.userStore.actionRegisterUser({
-          name: this.name,
+        await this.userStore.actionLoginUser({
+          userName: this.name,
           password: this.password,
         });
         if (this.userStore.user) {

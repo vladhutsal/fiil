@@ -13,7 +13,7 @@
     />
     <v-btn @click="savePng">Save</v-btn>
     <v-btn @click="loadAllPng">Load</v-btn>
-    <v-card :key="userImagesLen">
+    <v-card :key="userImagesCount">
       <canvas
         v-for="(img, idx) in imagesStore.userCanvas"
         :id="'userCanva' + idx"
@@ -32,13 +32,16 @@
 
   import { ILinePoints } from '@/interfaces';
   import useImagesStore from '@/store/imagesStore';
+  import useUserStore from '@/store/userStore';
+
 
   export default defineComponent({
     name: 'TheDrawMain',
 
     setup() {
       const imagesStore = useImagesStore();
-      return { imagesStore };
+      const userStore = useUserStore();
+      return { imagesStore, userStore };
     },
 
     data() {
@@ -46,7 +49,7 @@
         currentLinePoints: [] as ILinePoints[],
         allLines: [] as ILinePoints[][],
 
-        userImagesLen: -1,
+        userImagesCount: -1,
 
         canvas: undefined as (HTMLCanvasElement | undefined),
         context: undefined as (CanvasRenderingContext2D | undefined),
@@ -78,7 +81,7 @@
 
     methods: {
       setImageSrc(): void {
-        for (let idx = 0; idx <= this.userImagesLen; idx++) {
+        for (let idx = 0; idx <= this.userImagesCount; idx++) {
           const canvas = document.getElementById("userCanva" + idx) as HTMLCanvasElement;
           if (canvas) {
             const ctx = canvas.getContext("2d");
@@ -163,10 +166,10 @@
 
       async loadAllPng() {
         this.imagesStore.$patch({ loadingImages: true });
-        const imagesArray = await this.imagesStore.actionLoadAllPng();
-        if (imagesArray) {
-          this.imagesStore.$patch({ userCanvas: imagesArray });
-          this.userImagesLen = imagesArray.length;
+        const images = await this.imagesStore.actionLoadAllPng();
+        if (images) {
+          this.imagesStore.$patch({ userCanvas: images.images });
+          this.userImagesCount = images.count;
         }
         this.imagesStore.$patch({ loadingImages: false });
       },

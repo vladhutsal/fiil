@@ -13,22 +13,23 @@
 </template>
 
 <script lang="ts">
-import Authenticate from '@/components/Auth/Authenticate.vue';
-import { defineComponent } from '@vue/composition-api';
-import { TypeAuthTab } from '@/interfaces';
-import useUserStore from '@/store/userStore';
+  import Authenticate from '@/components/Auth/Authenticate.vue';
+  import { defineComponent } from '@vue/composition-api';
+  import { TypeAuthTab } from '@/interfaces';
+  import useUserStore from '@/store/userStore';
 
-export default defineComponent({
-  components: { Authenticate },
-  name: 'TheAuth',
 
-  setup() {
-    const userStore = useUserStore();
-    return { userStore };
-  },
-  
-  created() {
-    this.userStore.currentTypeAuthTab = this.$route.path.substring(1) as TypeAuthTab;
-  },
-});
+  export default defineComponent({
+    components: { Authenticate },
+    name: 'TheAuth',
+
+    setup() {
+      const userStore = useUserStore();
+      return { userStore };
+    },
+    
+    created() {
+      this.userStore.currentTypeAuthTab = this.$route.path.substring(1) as TypeAuthTab;
+    },
+  });
 </script>
