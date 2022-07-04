@@ -9,7 +9,6 @@ const connect = async () => {
   return client;
 }
 
-
 async function connectToMongo(): Promise<MongoClient> {
   try {
     return await connect();

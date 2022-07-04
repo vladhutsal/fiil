@@ -26,3 +26,9 @@ export interface IUserPublic {
   name: string;
   created: Bson.Timestamp;
 }
+
+
+export interface IResponse<ResponseDataT> {
+  payload?: ResponseDataT;
+  error?: string;
+}

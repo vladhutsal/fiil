@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { IImagesStore, IResponse, IUser, IUserRegister } from '@/interfaces';
 import { BACK_URL } from '@/env';
 
-const useImagesStore = defineStore('main', {
+const useImagesStore = defineStore('images', {
   state: (): IImagesStore => ({
     userCanvas: [],
     loadingImages: false,

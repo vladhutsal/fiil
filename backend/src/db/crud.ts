@@ -1,12 +1,12 @@
-import { MongoClient, Database, Collection, ObjectId } from '../deps.ts';
+import { MongoClient, Database as MongoDB, Collection, ObjectId } from '../deps.ts';
 import { IUserPngPrivate, IUserPrivate } from "../interfaces.ts";
 import { APP_DB_NAME } from "../../env/env.ts";
 import connection from "./init.ts";
 
 
-class CRUD {
+class Database {
   private client: MongoClient;
-  private database: Database;
+  private database: MongoDB;
 
   constructor(client: MongoClient) {
     this.client = client;
@@ -20,6 +20,7 @@ class CRUD {
   private get userCollection(): Collection<IUserPrivate> {
     return this.database.collection<IUserPrivate>("users");
   }
+
 
   public async getUserImages(): Promise<IUserPngPrivate[]> {
     return await this.imageCollection
@@ -42,5 +43,5 @@ class CRUD {
   }
 }
 
-const crud = new CRUD(connection);
-export default crud;
+const CRUD = new Database(connection);
+export default CRUD;

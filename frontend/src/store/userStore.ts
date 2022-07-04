@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { IUserStore, IUser, IUserRegister, IResponse } from '@/interfaces';
 import { BACK_URL } from '@/env';
 
-const useUserStore = defineStore('main', {
+const useUserStore = defineStore('user', {
   state: (): IUserStore => ({
     user: undefined,
     currentTypeAuthTab: 'login',
@@ -27,6 +27,10 @@ const useUserStore = defineStore('main', {
         console.log(err);
       }
     },
+
+    async actionLoginUser() {
+      
+    }
   },
 });
 

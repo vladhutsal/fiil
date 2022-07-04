@@ -27,6 +27,6 @@ export interface ILinePoints {
 }
 
 export interface IResponse<ResponseDataT> {
-  payload: ResponseDataT;
+  payload?: ResponseDataT;
   error?: string;
 }
