@@ -1,20 +1,20 @@
 import { RouterContext, Status } from "../deps.ts";
-import { throwError } from "../services/helpers.ts";
+import { throwError } from "../helpers.ts";
 import ImageService from "../services/image.service.ts";
 
 class ImageController {
   public static async getAllImages({ response }: RouterContext<string>): Promise<void> {
     try {
-      const preparedImages = await ImageService.getAllImages();
-      response.status = 200;
-      response.body = { payload: preparedImages };
+      const preparedImagesResponse = await ImageService.getAllImages();
+      response.body = preparedImagesResponse;
+  
     } catch (err) {
       console.log(err);
       throwError(response);
     }
   }
 
-  public static async uploadImage({ response, request }: RouterContext<string>): Promise<void> {
+  public static async createImage({ response, request }: RouterContext<string>): Promise<void> {
     try {
       if (!request.hasBody) {
         response.type = "application/json";
@@ -23,7 +23,9 @@ class ImageController {
       }
       const body = await request.body().value;
       await ImageService.createImage(body);
-      response.status = Status.OK;
+
+      response.status = Status.Created;
+
     } catch (err) {
       console.log(err);
       throwError(response);

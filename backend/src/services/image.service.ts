@@ -1,13 +1,12 @@
-import { IMG_DIR_PATH } from "../../env/env.ts";
-import CRUD from "../db/crud.ts";
-import { Bson, decode as b64decode, encode as b64ecnode } from "../deps.ts";
-import { IUserPngPrivate } from "../interfaces.ts";
-
-// TODO: handle errors, make services instead of helpers?
+import CRUD from '../db/crud.ts';
+import { IMG_DIR_PATH } from '../config.ts';
+import { Bson, decode as b64decode, encode as b64ecnode } from '../deps.ts';
+import { IImagePublic, IResponse } from '../types/interfaces.ts';
+import { ImageSchema } from '../types/schemas.ts'
 class ImageService {
-  public static async createImage(imageData: string) {
-    let image64 = imageData.replace("data:image/png;base64,", "");
-    image64 = image64.replace(" ", "+");
+  public static async createImage(imageData: string): Promise<void> {
+    let image64 = imageData.replace('data:image/png;base64,', '');
+    image64 = image64.replace(' ', '+');
 
     const decodedImage = b64decode(image64);
 
@@ -16,14 +15,14 @@ class ImageService {
     const imageURI = `${IMG_DIR_PATH}${name}`;
     await Deno.writeFile(imageURI, decodedImage);
 
-    const image: IUserPngPrivate = {
+    const image: ImageSchema = {
       _id: new Bson.ObjectId(),
       imgName: name,
     };
     await CRUD.addImage(image);
   }
 
-  public static async getAllImages(): Promise<string[]> {
+  public static async getAllImages(): Promise<IResponse<IImagePublic>> {
     const images = await CRUD.getUserImages();
     const preparedImages: string[] = [];
 
@@ -33,7 +32,8 @@ class ImageService {
       preparedImages.push(encoded);
     }
 
-    return preparedImages;
+    const payload = { images: preparedImages, count: preparedImages.length };
+    return { payload };
   }
 }
 

@@ -1,4 +1,4 @@
-import { MONGO_URL } from "../../env/env.ts";
+import { MONGO_URL } from "../config.ts";
 import { MongoClient } from '../deps.ts';
 
 const connect = async () => {
