@@ -4,7 +4,7 @@ import { IUserAuth } from "../types/interfaces.ts";
 import UserService from "../services/user.service.ts";
 
 class UserController {
-  public static async createUser({ response, request }: RouterContext<string>): Promise<void> {
+  public static async registerUser({ response, request }: RouterContext<string>): Promise<void> {
     try {
       response.type = "application/json";
       if (!request.hasBody) {
@@ -13,16 +13,14 @@ class UserController {
       }
 
       const body: IUserAuth = await request.body().value;
-      console.log('--- body on registerr', body)
-      const createUserResponse = await UserService.create(body);
-      if (createUserResponse.error) response.status = Status.Conflict;
+      const registerUserResponse = await UserService.create(body);
+      if (registerUserResponse.error) response.status = Status.Conflict;
 
       // TODO: allow user to login on registration
-      console.log('---- created user response', createUserResponse)
-      response.body = createUserResponse;
+      response.body = registerUserResponse;
 
-    } catch {
-      throwError(response);
+    } catch (err) {
+      throwError(response, err);
     }
   }
 
@@ -34,14 +32,13 @@ class UserController {
       }
 
       const body = await request.body().value;
-      console.log('--- user for login' , body)
       const loginUserResponse = await UserService.login(body);
       if (loginUserResponse.error) response.status = Status.Forbidden;
-      
+
       response.body = loginUserResponse;
 
-    } catch {
-      throwError(response);
+    } catch (err) {
+      throwError(response, err);
     }
   }
 }

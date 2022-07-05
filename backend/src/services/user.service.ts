@@ -13,7 +13,7 @@ class UserService {
       _id: new Bson.ObjectId(),
       userName: body.userName,
       passHash: await getPasswordHash(body.password),
-      created: new Bson.Timestamp(),
+      created: new Date().toUTCString(),
     };
     const createdUserId = await CRUD.addUser(newUserData);
     if (!createdUserId) return { error: `user not created ${Status.Conflict}` };
@@ -33,7 +33,7 @@ class UserService {
       _id: new Bson.ObjectId(),
       userId: user._id,
       token: await getJWTToken(user._id),
-      created: new Bson.Timestamp(),
+      created: new Date().toUTCString(),
     }
     await CRUD.saveToken(token);
     

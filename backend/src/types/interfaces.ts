@@ -5,7 +5,7 @@ import { Bson } from '../deps.ts';
 export interface IUserPublic {
   token?: string;
   userName: string;
-  created: Bson.Timestamp;
+  created: string;
 }
 
 export interface IImagePublic {
