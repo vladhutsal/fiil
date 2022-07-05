@@ -1,34 +1,39 @@
 <template>
   <v-row align="center" justify="center">
     <v-col cols="4">
-      <v-card flat>
-        <v-card-text class="pb-0">
-          <base-text-field
-            placeholder="name"
-            margin-bottom="mb-4"
-            :value="name"
-            @update:value="newValue => name = newValue"
-          />
-          <base-text-field
-            placeholder="password"
-            :value="password"
-            @update:value="newValue => password = newValue"
-          />
-        </v-card-text>
+      <v-form>
+        <v-card flat>
+          <v-card-text class="pb-0">
+            <BaseTextField
+              placeholder="name"
+              margin-bottom="mb-4"
+              :value="name"
+              @update:value="newValue => name = newValue"
+              @enter-action="isLogin ? loginUser() : registerUser()"
+            />
+            <BaseTextField
+              placeholder="password"
+              :value="password"
+              @update:value="newValue => password = newValue"
+              @enter-action="isLogin ? loginUser() : registerUser()"
+            />
+          </v-card-text>
 
-        <v-card-actions class="pt-0 d-flex d-row justify-center">
-          <v-btn
-            text
-            large
-            :ripple="false"
-            plain
-            class="text-lowercase title font-weight-light"
-            @click="isLogin ? loginUser() : registerUser()"
-          >
-            {{ isLogin ? 'enter' :'create user' }}
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+          <v-card-actions class="pt-0 d-flex d-row justify-center">
+            <v-btn
+              text
+              large
+              :ripple="false"
+              plain
+              class="text-lowercase title font-weight-light"
+              type="button"
+              @click="isLogin ? loginUser() : registerUser()"
+            >
+              {{ isLogin ? 'enter' :'create user' }}
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-form>
     </v-col>
   </v-row>
 </template>
@@ -39,7 +44,7 @@
   import BaseTextField from '@/components/Reusable/BaseTextField.vue';
 
   export default defineComponent({
-    name: 'Authenticate',
+    name: 'AuthForm',
     components: { BaseTextField },
 
     props: {
@@ -79,5 +84,6 @@
         }
       },
     },
+
   });
 </script>

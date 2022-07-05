@@ -160,13 +160,13 @@
       async savePng() {
         if (this.canvas) {
           const canvasData = this.canvas.toDataURL();
-          this.imagesStore.actionUploadPng(canvasData);
+          this.imagesStore.actionUploadImage(canvasData);
         }
       },
 
       async loadAllPng() {
         this.imagesStore.$patch({ loadingImages: true });
-        const images = await this.imagesStore.actionLoadAllPng();
+        const images = await this.imagesStore.actionFetchAllImages();
         if (images) {
           this.imagesStore.$patch({ userCanvas: images.images });
           this.userImagesCount = images.count;

@@ -1,4 +1,5 @@
 export type TypeAuthTab = 'login' | 'register';
+export type TypeAuthHeaders = { headers: { Authorization: string }};
 
 // Pinia stores. Good idea to split them?
 export interface IStoreImages {
@@ -7,7 +8,8 @@ export interface IStoreImages {
 }
 
 export interface IStoreUser {
-  user: IUser | undefined;
+  user: IUser;
+  loggedIn: boolean;
   currentTypeAuthTab: TypeAuthTab;
 }
 

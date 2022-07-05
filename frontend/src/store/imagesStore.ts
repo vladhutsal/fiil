@@ -1,6 +1,12 @@
+import axios from 'axios';
 import { defineStore } from 'pinia';
+
+import useUserStore from './userStore';
+
+import { API_URL } from '@/env';
+import { getAuthHeader } from '@/helpers';
 import { IStoreImages, IResponse, IImages } from '@/interfaces';
-import { BACK_URL } from '@/env';
+import { getCurrentUserToken } from './storeHelpers';
 
 const useImagesStore = defineStore('images', {
   state: (): IStoreImages => ({
@@ -9,23 +15,21 @@ const useImagesStore = defineStore('images', {
   }),
 
   actions: {
-    async actionUploadPng(canvasData: string): Promise<boolean> {
+    async actionUploadImage(canvasData: string): Promise<void> {
       try {
-        const resp = await fetch(BACK_URL + '/upload-png', {
-          method: 'POST',
-          body: canvasData,
-        });
-        return resp.ok;
+        const token = getCurrentUserToken();
+        await axios.post(`${API_URL}/upload-png`, canvasData, getAuthHeader(token));
+
       } catch (err) {
         console.log(err);
-        return false;
       }
     },
 
-    async actionLoadAllPng(): Promise<IImages | void> {
+    async actionFetchAllImages(): Promise<IImages | void> {
       try {
-        const resp = await fetch(BACK_URL + '/get-all-png');
-        const data: IResponse<IImages> = await resp.json();
+        const token = getCurrentUserToken();
+        const resp = await axios.get<IResponse<IImages>>(`${API_URL}/get-all-png`, getAuthHeader(token));
+        const data = resp.data;
         if (data.error) throw data.error;
         if (data) return data.payload;
 

@@ -10,6 +10,7 @@
     :class="marginBottom"
     :value="value"
     @input="$emit('update:value', $event)"
+    @keydown.enter="$emit('enter-action')"
   />
 </template>
 

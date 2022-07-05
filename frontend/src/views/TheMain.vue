@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <the-draw-main v-if="userStore.user" />
+    <the-draw-main v-if="userStore.user && userStore.user.token" />
   </v-container>
 </template>
 
@@ -8,7 +8,7 @@
   import useUserStore from '@/store/userStore';
   import { defineComponent } from '@vue/composition-api';
 
-  import TheDrawMain from '@/components/TheDrawMain.vue';
+  import TheDrawMain from '@/components/Drawing/TheDrawMain.vue';
   import TheAuth from '@/views/TheAuth.vue';
 
 
