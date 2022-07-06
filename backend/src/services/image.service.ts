@@ -19,11 +19,11 @@ class ImageService {
       _id: new Bson.ObjectId(),
       imgName: name,
     };
-    await CRUD.addImage(image);
+    await CRUD.insertImage(image);
   }
 
   public static async getAllImages(): Promise<IResponse<IImagePublic>> {
-    const images = await CRUD.getUserImages();
+    const images = await CRUD.findAllImages();
     const preparedImages: string[] = [];
 
     for (const img of images) {

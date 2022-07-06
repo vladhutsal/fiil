@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { IStoreUser, IUser, IUserAuth, IResponse } from '@/interfaces';
 import { API_URL } from '@/env';
-import { saveAuthToken } from '@/helpers';
+import { getAuthToken, saveAuthToken } from '@/helpers';
 import axios from 'axios';
 
 const anonymousUser: IUser = {
@@ -20,7 +20,7 @@ const useUserStore = defineStore('user', {
   actions: {
     async actionRegisterUser(userData: IUserAuth): Promise<void> {
       try {
-        const resp = await axios.post<IResponse<IUser>>(`${API_URL}/register`, userData);
+        const resp = await axios.post<IResponse<IUser>>(`${API_URL}/auth/register`, userData);
         const data = resp.data; 
         if (!data) throw 'empty response, user was not created';
         if (data.error) throw data.error;
@@ -32,7 +32,7 @@ const useUserStore = defineStore('user', {
 
     async actionLoginUser(userData: IUserAuth): Promise<void> {
       try {
-        const resp = await axios.post<IResponse<IUser>>(`${API_URL}/login`, userData);
+        const resp = await axios.post<IResponse<IUser>>(`${API_URL}/auth/login`, userData);
         const data = resp.data;
         if (!data) throw 'empty response, user was not created';
         if (data.error) throw data.error;
@@ -46,7 +46,14 @@ const useUserStore = defineStore('user', {
       } catch (err) {
         console.log(err);
       }
-      
+    },
+
+    async actionGetMe(): Promise<void> {
+      const resp = await axios.post<IResponse<IUser>>(`${API_URL}/user/getMe`, getAuthToken());
+      const data = resp.data;
+  
+      if (!data) throw 'empty response';
+      if (data.error) throw data.error;
     }
   },
 });

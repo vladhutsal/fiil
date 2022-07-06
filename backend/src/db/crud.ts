@@ -1,10 +1,11 @@
 import { MongoClient, Database as MongoDB, Collection, Bson } from '../deps.ts';
-import { ImageSchema, JWTTokenSchema, UserSchema } from '../types/schemas.ts';
+import { ImageSchema, JwtTokenSchema, UserSchema } from '../types/schemas.ts';
 import { APP_DB_NAME } from '../config.ts';
 import connection from './init.ts';
 import { TMongoInsert } from "../types/types.ts";
 
-// TODO: separate crud for each collection?
+// TODO: separated crud for each collection?
+// Move all collection work to services?
 class Database {
   private client: MongoClient;
   private database: MongoDB;
@@ -14,6 +15,8 @@ class Database {
     this.database = this.client.database(APP_DB_NAME);
   }
 
+
+  // -- collections --
   private get imageCollection(): Collection<ImageSchema> {
     return this.database.collection<ImageSchema>('images');
   }
@@ -22,32 +25,46 @@ class Database {
     return this.database.collection<UserSchema>('users');
   }
 
-  private get tokenCollection(): Collection<JWTTokenSchema> {
-    return this.database.collection<JWTTokenSchema>('tokens');
+  private get tokenCollection(): Collection<JwtTokenSchema> {
+    return this.database.collection<JwtTokenSchema>('tokens');
   }
 
-  public async getUserImages(): Promise<ImageSchema[]> {
+
+  // -- images --
+  public async findAllImages(): Promise<ImageSchema[]> {
     return await this.imageCollection
       .find({}, { noCursorTimeout: false })
       .sort({ _id: -1 })
       .map((image) => ({ ...image }));
   }
 
-  public async addImage(image: ImageSchema): Promise<void> {
-    await this.imageCollection.insertOne(image);
+  public async insertImage(image: ImageSchema): TMongoInsert {
+    return await this.imageCollection.insertOne(image);
   }
 
-  public async addUser(user: UserSchema): TMongoInsert {
+
+  // -- users --
+  public async insertUser(user: UserSchema): TMongoInsert {
     return await this.userCollection.insertOne(user);
   }
 
-  public async getUser(userName: string): Promise<UserSchema | void> {
-    const res = await this.userCollection.find({ userName }).toArray();
-    return res.length > 0 ? res[0] : undefined;
+  public async findUserByName(userName: string): Promise<UserSchema | void> {
+    return await this.userCollection.findOne({ userName });
   }
 
-  public async saveToken(token: JWTTokenSchema): TMongoInsert {
+  public async findUserById(_id: Bson.ObjectId): Promise<UserSchema | void> {
+    return await this.userCollection.findOne({ _id });
+  }
+
+
+  // -- tokens --
+  public async insertToken(token: JwtTokenSchema): TMongoInsert {
     return await this.tokenCollection.insertOne(token);
+  }
+
+  public async findToken(token: string, uid: string): Promise<JwtTokenSchema | void> {
+    const _id = new Bson.ObjectId(uid);
+    return await this.tokenCollection.findOne({ token, _id });
   }
 }
 

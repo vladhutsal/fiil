@@ -1,4 +1,4 @@
-import { Bson } from '../deps.ts';
+import { Bson, Payload } from '../deps.ts';
 
 // <ISomeName>Public - shared with frontend
 
@@ -16,6 +16,17 @@ export interface IImagePublic {
 export interface IUserAuth {
   userName: string;
   password: string;
+}
+
+
+export interface IDbFindUser {
+  _id?: Bson.ObjectId;
+  userName?: string;
+}
+
+
+export interface IJwtPayload extends Payload {
+  uid: string;
 }
 
 

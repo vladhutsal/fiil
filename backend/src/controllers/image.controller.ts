@@ -1,5 +1,5 @@
 import { RouterContext, Status } from "../deps.ts";
-import { throwError } from "../helpers.ts";
+import { throwError } from "./controllers.helpers.ts";
 import ImageService from "../services/image.service.ts";
 
 class ImageController {

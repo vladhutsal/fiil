@@ -1,12 +1,13 @@
 import CRUD from "../db/crud.ts";
 import { bcryptCompare, Bson, Status } from "../deps.ts";
-import { getJWTToken, getPasswordHash } from "../helpers.ts";
-import { IResponse, IUserPublic, IUserAuth } from "../types/interfaces.ts";
-import { JWTTokenSchema } from "../types/schemas.ts";
+import { createUserJwtToken, getPasswordHash, getTokenPayload } from "./services.helpers.ts";
+import { IResponse, IUserPublic, IUserAuth, IJwtPayload } from "../types/interfaces.ts";
 
+
+// handle errors
 class UserService {
-  public static async create(body: IUserAuth): Promise<IResponse<IUserPublic>> {
-    const existedUser = await CRUD.getUser(body.userName);
+  public static async register(body: IUserAuth): Promise<IResponse<IUserPublic>> {
+    const existedUser = await CRUD.findUserByName(body.userName);
     if (existedUser) return { error: `username taken ${Status.Conflict}` };
     
     const newUserData = {
@@ -15,7 +16,7 @@ class UserService {
       passHash: await getPasswordHash(body.password),
       created: new Date().toUTCString(),
     };
-    const createdUserId = await CRUD.addUser(newUserData);
+    const createdUserId = await CRUD.insertUser(newUserData);
     if (!createdUserId) return { error: `user not created ${Status.Conflict}` };
 
     const payload = { userName: newUserData.userName, created: newUserData.created };
@@ -23,26 +24,31 @@ class UserService {
   }
 
   public static async login(body: IUserAuth): Promise<IResponse<IUserPublic>> {
-    const user = await CRUD.getUser(body.userName);
+    const user = await CRUD.findUserByName(body.userName);
     if (!user) return { error: `invalid username ${Status.Forbidden}`};
 
     const isPassValid = await bcryptCompare(body.password, user.passHash);
     if (!isPassValid) return { error: `invalid password ${Status.Forbidden}`};
 
-    const token: JWTTokenSchema = {
-      _id: new Bson.ObjectId(),
-      userId: user._id,
-      token: await getJWTToken(user._id),
-      created: new Date().toUTCString(),
-    }
-    await CRUD.saveToken(token);
-    
+    const token = await createUserJwtToken(user._id);
     const payload = {
-      token: token.token,
+      token: token,
       userName: user.userName,
       created: user.created,
     };
 
+    return { payload };
+  }
+
+  public static async getMe(userToken: string): Promise<IResponse<IUserPublic>> {
+    const userTokenPayload: IJwtPayload = await getTokenPayload(userToken);
+    const storedToken = await CRUD.findToken(userToken, userTokenPayload.uid);
+    if (!storedToken) return { error: `no token ${Status.NotFound}` };
+
+    const user = await CRUD.findUserById(storedToken._id);
+    if (!user) return { error: `no user ${Status.NotFound}` };
+
+    const payload  = { ...user };
     return { payload };
   }
 }

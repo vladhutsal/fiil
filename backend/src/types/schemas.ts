@@ -12,7 +12,7 @@ export interface UserSchema {
   created: string;
 }
 
-export interface JWTTokenSchema {
+export interface JwtTokenSchema {
   _id: Bson.ObjectId;
   userId: Bson.ObjectId;
   token: string;
