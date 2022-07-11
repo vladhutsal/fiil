@@ -1,17 +1,37 @@
-import { JWTExpirationTime } from "../config.ts";
+import { Header, Bson } from '../deps.ts';
+import { bcryptGenSalt, bcryptHash } from '../deps.ts';
+import { createJWT, verifyJWT } from '../deps.ts';
+import { tokenSecret } from '../config.ts';
+
 import CRUD from "../db/crud.ts";
-import { bcryptGenSalt, bcryptHash, Bson, createJWT, verifyJWT } from '../deps.ts';
-import { Header } from '../deps.ts';
+import { JWTExpirationTime } from "../config.ts";
+
 import { IJwtPayload } from "../types/interfaces.ts";
 import { JwtTokenSchema } from "../types/schemas.ts";
 
-export const getTokenPayload = async (token: string): Promise<IJwtPayload> => {
-  return await verifyJWT(token, JWTSecret) as IJwtPayload;
+const getJwtSecret = async (secret: string) => {
+  const enc = new TextEncoder();
+  const bKey = enc.encode(secret);
+  const hmacParams = {
+    name: "HMAC",
+    hash: { name: "SHA-512" },
+  };
+  return await crypto.subtle.importKey('raw', bKey, hmacParams, true, ['sign', 'verify']);
+}
+
+const JWTSecret = await getJwtSecret(tokenSecret!);
+
+
+export const verifyAndGetJwtPayload = async (token: string): Promise<IJwtPayload | void> => {
+  try {
+    return await verifyJWT(token, JWTSecret) as IJwtPayload;
+  } catch (err) {
+    console.log('JWT: could not verify token', err)
+    return;
+  }
 }
 
 export const createUserJwtToken = async (userId: Bson.ObjectId): Promise<string> => {
-  console.log('--- user id', userId);
-
   const token: JwtTokenSchema = {
     _id: new Bson.ObjectId(),
     userId: userId,
@@ -36,14 +56,6 @@ const generateJwtToken = async (userId: Bson.ObjectId): Promise<string> => {
 
   return await createJWT(header, payload, JWTSecret)
 };
-
-const JWTSecret = await crypto.subtle.generateKey( 
-  { name: 'HMAC', hash: 'SHA-512' },
-  true,
-  ['sign', 'verify'],
-);
-
-
 
 
 export const getPasswordHash = async (pass: string): Promise<string> => {

@@ -1,7 +1,8 @@
-import { Application, logger, oakCors } from "./deps.ts";
-import router from "./api/index.ts";
+import { Application, logger, oakCors } from './deps.ts';
+import router from './api/index.ts';
+import { IRouterState } from './types/interfaces.ts';
 
-const app = new Application();
+const app = new Application<IRouterState>();
 
 app.use(oakCors({
   // origin: 'http://192.168.0.113:8080/',

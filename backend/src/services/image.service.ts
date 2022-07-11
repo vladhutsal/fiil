@@ -1,8 +1,10 @@
 import CRUD from '../db/crud.ts';
 import { IMG_DIR_PATH } from '../config.ts';
 import { Bson, decode as b64decode, encode as b64ecnode } from '../deps.ts';
-import { IImagePublic, IResponse } from '../types/interfaces.ts';
+import { IImagesPublic, IResponse } from '../types/interfaces.ts';
 import { ImageSchema } from '../types/schemas.ts'
+
+
 class ImageService {
   public static async createImage(imageData: string): Promise<void> {
     let image64 = imageData.replace('data:image/png;base64,', '');
@@ -22,7 +24,7 @@ class ImageService {
     await CRUD.insertImage(image);
   }
 
-  public static async getAllImages(): Promise<IResponse<IImagePublic>> {
+  public static async getAllImages(): Promise<IResponse<IImagesPublic>> {
     const images = await CRUD.findAllImages();
     const preparedImages: string[] = [];
 

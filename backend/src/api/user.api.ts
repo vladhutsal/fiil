@@ -1,13 +1,12 @@
 import { Router } from '../deps.ts';
 import { API_URL } from '../config.ts';
 import UserController from "../controllers/user.controller.ts";
-
-const UAPI_URL = API_URL + '/auth';
+import { autorizeUser } from "../middleware/auth.middleware.ts";
 
 const authRoutes = (router: Router) => {
-  router.post(UAPI_URL + 'registerUser', UserController.registerUser);
-  router.post(UAPI_URL + 'login', UserController.loginUser);
-  router.get(UAPI_URL + 'get-me', UserController.getMe);
+  router.post(API_URL + '/auth/register', UserController.registerUser);
+  router.post(API_URL + '/auth/login', UserController.loginUser);
+  router.get(API_URL + '/user/get-me', autorizeUser(), UserController.getMe);
 };
 
 export default authRoutes;

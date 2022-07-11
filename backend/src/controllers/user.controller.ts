@@ -1,6 +1,6 @@
 import { Status } from "../deps.ts";
 import { throwError } from "./controllers.helpers.ts";
-import { IUserAuth } from "../types/interfaces.ts";
+import { IRouterState, IUserAuth } from "../types/interfaces.ts";
 import UserService from "../services/user.service.ts";
 import { TRouterContext } from "../types/types.ts";
 
@@ -9,7 +9,7 @@ class UserController {
     try {
       response.type = "application/json";
       if (!request.hasBody) {
-        response.body = { error: `empty name/pass ${Status.UnprocessableEntity}}` };
+        response.body = { error: `register: empty name/pass ${Status.UnprocessableEntity}}` };
         return;
       }
 
@@ -28,7 +28,7 @@ class UserController {
   public static async loginUser({ response, request }: TRouterContext): Promise<void> {
     try {
       if (!request.hasBody) {
-        response.body = { error: `empty name/pass ${Status.UnprocessableEntity}}` };
+        response.body = { error: `login: empty name/pass ${Status.UnprocessableEntity}}` };
         return;
       }
 
@@ -43,14 +43,11 @@ class UserController {
     }
   }
 
-  public static async getMe({ response, request }: TRouterContext): Promise<void> {
+  public static getMe({ response, state }: TRouterContext): void {
     try {
-      if (!request.hasBody) {
-        response.body = { error: `no token ${Status.Forbidden}` };
-        return;
-      }
-      const body = await request.body().value;
-      const getMeResponse = await UserService.getMe(body);
+      const typedState = state as IRouterState;
+
+      const getMeResponse = UserService.getMe(typedState.user);
       if (getMeResponse.error) response.status = Status.NotFound;
       response.body = getMeResponse;
 

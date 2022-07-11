@@ -63,8 +63,8 @@ class Database {
   }
 
   public async findToken(token: string, uid: string): Promise<JwtTokenSchema | void> {
-    const _id = new Bson.ObjectId(uid);
-    return await this.tokenCollection.findOne({ token, _id });
+    const userId = new Bson.ObjectId(uid);
+    return await this.tokenCollection.findOne({ token, userId });
   }
 }
 

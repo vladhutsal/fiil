@@ -1,17 +1,21 @@
-import { Bson, Payload } from '../deps.ts';
+import { Bson, Payload, State } from '../deps.ts';
 
-// <ISomeName>Public - shared with frontend
+// <ISomeName>Public - to share with frontend as IResponse.payload property
 
 export interface IUserPublic {
-  token?: string;
   userName: string;
   created: string;
 }
 
-export interface IImagePublic {
+export interface IImagesPublic {
   images: string[];
   count: number;
 }
+
+export interface ITokenPublic {
+  token: string;
+}
+
 
 export interface IUserAuth {
   userName: string;
@@ -19,14 +23,18 @@ export interface IUserAuth {
 }
 
 
-export interface IDbFindUser {
-  _id?: Bson.ObjectId;
-  userName?: string;
+export interface IJwtPayload extends Payload {
+  uid: string;
+}
+
+// temp, while yup is not here
+export interface IUserPrivate extends IUserPublic {
+  _id: Bson.ObjectId;
 }
 
 
-export interface IJwtPayload extends Payload {
-  uid: string;
+export interface IRouterState extends State {
+  user: IUserPrivate
 }
 
 

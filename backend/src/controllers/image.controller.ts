@@ -22,6 +22,7 @@ class ImageController {
         return;
       }
       const body = await request.body().value;
+      
       await ImageService.createImage(body);
 
       response.status = Status.Created;
