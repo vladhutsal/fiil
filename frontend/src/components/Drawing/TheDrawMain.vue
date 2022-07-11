@@ -31,8 +31,8 @@
   import { defineComponent } from '@vue/composition-api';
 
   import { ILinePoints } from '@/interfaces';
-  import useImagesStore from '@/store/imagesStore';
-  import useUserStore from '@/store/userStore';
+  import useImagesStore from '@/store/images/images.store';
+  import useUserStore from '@/store/user/user.store';
 
 
   export default defineComponent({

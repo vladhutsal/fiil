@@ -1,11 +1,11 @@
 <template>
   <v-container>
-    <the-draw-main v-if="userStore.user && userStore.user.token" />
+    <the-draw-main />
   </v-container>
 </template>
 
 <script lang="ts">
-  import useUserStore from '@/store/userStore';
+  import useUserStore from '@/store/user/user.store';
   import { defineComponent } from '@vue/composition-api';
 
   import TheDrawMain from '@/components/Drawing/TheDrawMain.vue';
@@ -22,10 +22,6 @@
     setup() {
       const userStore = useUserStore();
       return { userStore };
-    },
-
-    created() {
-      if (!this.userStore.user) this.$router.push('/login');
     },
   });
 </script>

@@ -1,0 +1,13 @@
+store:
+  - handle errors. create module with different kind exceptions for store actions:
+    throw new UserStoreException('some message to show')
+
+    const UserStoreException (message: string) => {
+      return {
+        location: userStore,
+        message: message,
+      };
+    }
+
+  - logout if no token
+  - handle broken token

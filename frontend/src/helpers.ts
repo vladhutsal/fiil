@@ -1,4 +1,4 @@
-import { TypeAuthHeaders } from './interfaces';
+import { TypeRequestHeaders } from './interfaces';
 
 export const compileUnit8Array = (base64: string): Uint8Array => {
   const binary_string = window.atob(base64);
@@ -11,9 +11,10 @@ export const compileUnit8Array = (base64: string): Uint8Array => {
   return bytes as Uint8Array;
 };
 
-export const getAuthHeader = (token: string): TypeAuthHeaders => (
+export const getAuthHeader = (token: string): TypeRequestHeaders => (
   { headers: { Authorization: `Bearer ${token}` } }
 );
 
-export const saveAuthToken = (token: string): void => localStorage.setItem('token', token);
-export const getAuthToken = (): string | null => localStorage.getItem('token');
+export const saveLocalAuthToken = (token: string): void => localStorage.setItem('token', token);
+export const getLocalAuthToken = (): string | null => localStorage.getItem('token');
+export const removeLocalAuthToken = (): void => localStorage.removeItem('token');

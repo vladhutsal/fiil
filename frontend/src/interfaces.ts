@@ -1,5 +1,13 @@
+import { AxiosResponse } from 'axios';
+
 export type TypeAuthTab = 'login' | 'register';
-export type TypeAuthHeaders = { headers: { Authorization: string }};
+export type TypeAxiosResponse<D> = Promise<AxiosResponse<IResponse<D>>>;
+export type TypeRequestHeaders = { 
+  headers: { 
+    Authorization: string,
+    'Content-Type'?: string, 
+  }
+};
 
 // Pinia stores. Good idea to split them?
 export interface IStoreImages {
@@ -8,16 +16,24 @@ export interface IStoreImages {
 }
 
 export interface IStoreUser {
-  user: IUser;
+  token: string;
+  user: IUserPublic;
   loggedIn: boolean;
-  currentTypeAuthTab: TypeAuthTab;
 }
 
 
-export interface IUser {
-  token: string;
+export interface IUserPublic {
   userName: string;
   created: string;
+}
+
+export interface IImagesPublic {
+  images: string[];
+  count: number;
+}
+
+export interface ITokenPublic {
+  token: string;
 }
 
 export interface IUserAuth {
@@ -26,14 +42,10 @@ export interface IUserAuth {
 }
 
 
+
 export interface ILinePoints {
   x: number;
   y: number;
-}
-
-export interface IImages {
-  images: string[];
-  count: number;
 }
 
 export interface IResponse<ResponseDataT> {

@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
+
 import TheHome from '../views/TheMain.vue';
+import TheAuth from '@/views/TheAuth.vue';
+import TheChat from '@/views/TheChat.vue';
 
 Vue.use(VueRouter);
 
@@ -13,22 +16,19 @@ const routes: Array<RouteConfig> = [
   {
     path: '/chat',
     name: 'Chat',
-    component: () =>
-      import(/* webpackChunkName: 'chat' */ '../views/TheChat.vue'),
+    component: TheChat,
   },
   {
     path: '/login',
-    name: 'Login',
-    component: () =>
-      import(/* webpackChunkName: 'login' */ '../views/TheAuth.vue'),
+    component: TheAuth,
+    props: { currentAuthTab: 'login' },
   },
   {
     path: '/register',
-    name: 'Register',
-    component: () =>
-      import(/* webpackChunkName: 'register' */ '../views/TheAuth.vue'),
+    component: TheAuth,
+    props: { currentAuthTab: 'create user' },
   },
-  { path: '*', component: TheHome }
+  { path: '*', redirect: '/' }
 ];
 
 const router = new VueRouter({

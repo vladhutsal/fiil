@@ -8,30 +8,35 @@
               placeholder="name"
               margin-bottom="mb-4"
               :value="name"
+              @focus="$emit('clear-error-on-focus')"
               @update:value="newValue => name = newValue"
-              @enter-action="isLogin ? loginUser() : registerUser()"
+              @enter-action="emitFieldsData"
             />
             <BaseTextField
               placeholder="password"
               :value="password"
+              @focus="$emit('clear-error-on-focus')"
               @update:value="newValue => password = newValue"
-              @enter-action="isLogin ? loginUser() : registerUser()"
+              @enter-action="emitFieldsData"
             />
           </v-card-text>
 
-          <v-card-actions class="pt-0 d-flex d-row justify-center">
+          <v-card-actions class="py-0 d-flex d-row justify-center">
             <v-btn
               text
-              large
               :ripple="false"
               plain
               class="text-lowercase title font-weight-light"
               type="button"
-              @click="isLogin ? loginUser() : registerUser()"
+              @click="emitFieldsData"
             >
-              {{ isLogin ? 'enter' :'create user' }}
+              {{ buttonText }}
             </v-btn>
           </v-card-actions>
+
+          <div class="d-flex d-row justify-center">
+            <p class="red--text text-caption mb-0">{{ errorMsg }}</p>
+          </div>
         </v-card>
       </v-form>
     </v-col>
@@ -39,7 +44,7 @@
 </template>
 
 <script lang="ts">
-  import useUserStore from '@/store/userStore';
+  import useUserStore from '@/store/user/user.store';
   import { defineComponent } from '@vue/composition-api';
   import BaseTextField from '@/components/Reusable/BaseTextField.vue';
 
@@ -48,7 +53,8 @@
     components: { BaseTextField },
 
     props: {
-      isLogin: { type: Boolean, required: true },
+      buttonText: { type: String, required: true },
+      errorMsg: { type: String, required: true },
     },
 
     setup() {
@@ -64,26 +70,11 @@
     },
 
     methods: {
-      async registerUser() {
-        await this.userStore.actionRegisterUser({
-          userName: this.name,
-          password: this.password,
-        });
-        if (this.userStore.user) {
-          this.$router.push('/');
+      emitFieldsData() {
+        if (this.name && this.password) {
+          this.$emit('submit-action', this.name, this.password);
         }
-      },
-
-      async loginUser() {
-        await this.userStore.actionLoginUser({
-          userName: this.name,
-          password: this.password,
-        });
-        if (this.userStore.user) {
-          this.$router.push('/');
-        }
-      },
-    },
-
+      }
+    }
   });
 </script>

@@ -1,6 +1,6 @@
 <template>
   <v-app-bar app flat>
-    <div v-if="userStore.user" class="d-flex d-row justify-center pa-0" :style="{'minWidth': '100%'}">
+    <div v-if="userStore.loggedIn" class="d-flex d-row justify-center pa-0" :style="{'minWidth': '100%'}">
       <v-btn
         text
         :ripple="false"
@@ -29,7 +29,6 @@
         plain
         to="login"
         class="text-lowercase"
-        @click="userStore.currentTypeAuthTab = 'login'"
       >
         login
       </v-btn>
@@ -40,7 +39,6 @@
         plain
         to="register"
         class="text-lowercase"
-        @click="userStore.currentTypeAuthTab = 'register'"
       >
         register
       </v-btn>
@@ -49,7 +47,7 @@
 </template>
 
 <script lang="ts">
-  import useUserStore from "@/store/userStore";
+  import useUserStore from "@/store/user/user.store";
   import { defineComponent } from '@vue/composition-api';
 
 
