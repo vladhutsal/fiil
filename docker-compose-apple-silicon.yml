@@ -1,28 +1,62 @@
 version: '3.9'
 services:
-
   mongodb:
-    extends:
-      file: docker-compose.yml
-      service: mongodb
+    image: mongo:latest
+    container_name: mongodb
+    volumes:
+      - ./database:/data/db
+    networks:
+      - fiil
+    expose:
+      - "27017"
+    restart: always
+    logging:
+      options:
+        max-size: "5k"
+    command: mongod --logpath /data/db/logs
 
   backend:
-    extends:
-      file: docker-compose.yml
-      service: backend
-  
+    container_name: backend
+    networks:
+      - fiil
     build:
+      context: ./backend
       dockerfile: Dockerfile.apple.silicon
+    command: denon start
+    volumes:
+      - ./backend/:/backend
+    expose:
+      - "8000"
+    depends_on:
+      - mongodb
+      - nginx
+    restart: on-failure
   
   frontend:
-    extends:
-      file: docker-compose.yml
-      service: frontend
-    
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm run serve
+    volumes:
+        - ./frontend/:/frontend
+    networks:
+      - fiil
+    expose:
+      - "8080"
+    depends_on:
+      - backend
+      - nginx
+
   nginx:
-    extends:
-      file: docker-compose.yml
-      service: nginx
+    image: nginx:latest
+    networks:
+      - fiil
+    container_name: nginx
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
 
 networks:
   fiil:
