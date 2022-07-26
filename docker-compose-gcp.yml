@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+
+  mongodb:
+    extends:
+      file: docker-compose.yml
+      service: mongodb
+
+  backend:
+    extends:
+      file: docker-compose.yml
+      service: backend
+  
+    build:
+      dockerfile: Dockerfile.apple.silicon
+  
+  frontend:
+    extends:
+      file: docker-compose.yml
+      service: frontend
+    command: npm run serve-gcp
+    
+  nginx:
+    extends:
+      file: docker-compose.yml
+      service: nginx
+
+networks:
+  fiil:

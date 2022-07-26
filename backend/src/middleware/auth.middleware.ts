@@ -1,7 +1,6 @@
-import { Status } from "../deps.ts";
+import { RouterMiddleware, Status } from "../deps.ts";
 import CRUD from "../db/crud.ts";
 import { verifyAndGetJwtPayload } from "../services/services.helpers.ts";
-import { RouterMiddleware } from "https://deno.land/x/oak@v10.2.0/router.ts";
 import { IRouterState } from "../types/interfaces.ts";
 
 export const autorizeUser = (): RouterMiddleware<string> => (

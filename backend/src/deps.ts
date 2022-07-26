@@ -14,7 +14,7 @@ export {
     hash as bcryptHash
 } from "https://deno.land/x/bcrypt@v0.4.0/mod.ts";
 
-export type { RouterContext, State, Response } from "https://deno.land/x/oak@v10.2.0/mod.ts";
+export type { RouterContext, State, Response, RouterMiddleware } from "https://deno.land/x/oak@v10.2.0/mod.ts";
 export { Application, Router, Status } from "https://deno.land/x/oak@v10.2.0/mod.ts"
 export { oakCors } from "https://deno.land/x/cors@v1.2.2/mod.ts";
 
